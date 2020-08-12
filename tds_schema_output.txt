@@ -1,0 +1,922 @@
+SQL> 
+SQL> 
+SQL> DROP TABLE allocation CASCADE CONSTRAINTS;
+
+Table ALLOCATION dropped.
+
+SQL> 
+SQL> DROP TABLE cancellation CASCADE CONSTRAINTS;
+
+Table CANCELLATION dropped.
+
+SQL> 
+SQL> DROP TABLE demerit CASCADE CONSTRAINTS;
+
+Table DEMERIT dropped.
+
+SQL> 
+SQL> DROP TABLE driver CASCADE CONSTRAINTS;
+
+Table DRIVER dropped.
+
+SQL> 
+SQL> DROP TABLE engine CASCADE CONSTRAINTS;
+
+Table ENGINE dropped.
+
+SQL> 
+SQL> DROP TABLE licence_type CASCADE CONSTRAINTS;
+
+Table LICENCE_TYPE dropped.
+
+SQL> 
+SQL> DROP TABLE manufacturer CASCADE CONSTRAINTS;
+
+Table MANUFACTURER dropped.
+
+SQL> 
+SQL> DROP TABLE model CASCADE CONSTRAINTS;
+
+Table MODEL dropped.
+
+SQL> 
+SQL> DROP TABLE offence CASCADE CONSTRAINTS;
+
+Table OFFENCE dropped.
+
+SQL> 
+SQL> DROP TABLE officer CASCADE CONSTRAINTS;
+
+Table OFFICER dropped.
+
+SQL> 
+SQL> DROP TABLE registration CASCADE CONSTRAINTS;
+
+Table REGISTRATION dropped.
+
+SQL> 
+SQL> DROP TABLE registration_start CASCADE CONSTRAINTS;
+
+Table REGISTRATION_START dropped.
+
+SQL> 
+SQL> DROP TABLE station CASCADE CONSTRAINTS;
+
+Table STATION dropped.
+
+SQL> 
+SQL> DROP TABLE suspension CASCADE CONSTRAINTS;
+
+Table SUSPENSION dropped.
+
+SQL> 
+SQL> DROP TABLE suspension_period CASCADE CONSTRAINTS;
+
+Table SUSPENSION_PERIOD dropped.
+
+SQL> 
+SQL> DROP TABLE vehicle CASCADE CONSTRAINTS;
+
+Table VEHICLE dropped.
+
+SQL> 
+SQL> CREATE TABLE allocation (
+  2      assign_date   DATE NOT NULL,
+  3      st_no         VARCHAR2(5) NOT NULL,
+  4      officer_id    VARCHAR2(8) NOT NULL
+  5  );
+
+Table ALLOCATION created.
+
+SQL> 
+SQL> COMMENT ON COLUMN allocation.st_no IS
+  2      'Station number';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN allocation.officer_id IS
+  2      'Officer ID';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE allocation
+  2      ADD CONSTRAINT allocation_pk PRIMARY KEY ( assign_date,
+  3                                                 st_no,
+  4                                                 officer_id );
+
+Table ALLOCATION altered.
+
+SQL> 
+SQL> CREATE TABLE cancellation (
+  2      date_cancelled              DATE NOT NULL,
+  3      period_cancellation         CHAR(2) NOT NULL,
+  4      reason_cancelled            VARCHAR2(30) NOT NULL,
+  5      court_hearing_date          DATE NOT NULL,
+  6      licence_reinstatment_date   DATE NOT NULL,
+  7      licence_no                  VARCHAR2(15) NOT NULL
+  8  );
+
+Table CANCELLATION created.
+
+SQL> 
+SQL> COMMENT ON COLUMN cancellation.date_cancelled IS
+  2      'Licence cancellation date';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN cancellation.period_cancellation IS
+  2      'Period for which the licence remains cancelled(in months)';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN cancellation.reason_cancelled IS
+  2      'Reason for the cancellation of the licence';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN cancellation.court_hearing_date IS
+  2      'Court hearing date';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN cancellation.licence_reinstatment_date IS
+  2      'Date on which licence will be reinstated';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN cancellation.licence_no IS
+  2      'Licence number of the driver';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE cancellation ADD CONSTRAINT cancellation_pk PRIMARY KEY ( date_cancelled,
+  2                                                                        licence_no );
+
+Table CANCELLATION altered.
+
+SQL> 
+SQL> CREATE TABLE demerit (
+  2      demerit_code          VARCHAR2(5) NOT NULL,
+  3      demerit_points        NUMBER(2),
+  4      demerit_description   VARCHAR2(25)
+  5  );
+
+Table DEMERIT created.
+
+SQL> 
+SQL> COMMENT ON COLUMN demerit.demerit_code IS
+  2      'Demerit code';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN demerit.demerit_points IS
+  2      'Points for the  demerit';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN demerit.demerit_description IS
+  2      'Description of the demerit';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE demerit ADD CONSTRAINT demerit_pk PRIMARY KEY ( demerit_code );
+
+Table DEMERIT altered.
+
+SQL> 
+SQL> CREATE TABLE driver (
+  2      licence_no       VARCHAR2(15) NOT NULL,
+  3      licence_status   CHAR(10) NOT NULL,
+  4      d_fname          CHAR(20) NOT NULL,
+  5      d_lname          CHAR(20) NOT NULL,
+  6      date_of_birth    DATE NOT NULL,
+  7      licence_expiry   DATE NOT NULL,
+  8      add_street       VARCHAR2(20) NOT NULL,
+  9      add_town         VARCHAR2(20) NOT NULL,
+ 10      add_postcode     NUMBER(4) NOT NULL
+ 11  );
+
+Table DRIVER created.
+
+SQL> 
+SQL> COMMENT ON COLUMN driver.licence_no IS
+  2      'Licence number of the driver';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN driver.licence_status IS
+  2      'Status of the licence(Active or Cancelled)';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN driver.d_fname IS
+  2      'Driver''s first name';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN driver.d_lname IS
+  2      'Driver''s last name';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN driver.date_of_birth IS
+  2      'Driver''s date of birth';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN driver.licence_expiry IS
+  2      'Licence expiry date';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN driver.add_street IS
+  2      'Address: Street';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN driver.add_town IS
+  2      'Address: Town';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN driver.add_postcode IS
+  2      'Address: Postcode';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE driver ADD CONSTRAINT driver_pk PRIMARY KEY ( licence_no );
+
+Table DRIVER altered.
+
+SQL> 
+SQL> CREATE TABLE engine (
+  2      engine_type   VARCHAR2(10) NOT NULL,
+  3      model_id      CHAR(5) NOT NULL
+  4  );
+
+Table ENGINE created.
+
+SQL> 
+SQL> ALTER TABLE engine
+  2      ADD CONSTRAINT chk_engine_type CHECK ( engine_type IN (
+  3          'Diesel',
+  4          'Electric',
+  5          'Gas',
+  6          'Petrol'
+  7      ) );
+
+Table ENGINE altered.
+
+SQL> 
+SQL> COMMENT ON COLUMN engine.engine_type IS
+  2      'Type of engine(Petrol, Gas, Diesel, Electric)';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN engine.model_id IS
+  2      'Model ID(Surrogate key)';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE engine ADD CONSTRAINT engine_pk PRIMARY KEY ( engine_type,
+  2                                                            model_id );
+
+Table ENGINE altered.
+
+SQL> 
+SQL> CREATE TABLE licence_type (
+  2      licence_type_held   VARCHAR2(25) NOT NULL,
+  3      licence_no          VARCHAR2(15) NOT NULL
+  4  );
+
+Table LICENCE_TYPE created.
+
+SQL> 
+SQL> ALTER TABLE licence_type
+  2      ADD CONSTRAINT chk_licence_type_held CHECK ( licence_type_held IN (
+  3          'Car',
+  4          'Heavy combination Truck',
+  5          'Heavy rigid Truck',
+  6          'Light rigid Truck',
+  7          'Marine',
+  8          'Medium rigid Truck',
+  9          'Motorcycle',
+ 10          'Multi combination Truck',
+ 11          'Tractor'
+ 12      ) );
+
+Table LICENCE_TYPE altered.
+
+SQL> 
+SQL> COMMENT ON COLUMN licence_type.licence_type_held IS
+  2      'Types of licence held by the driver ';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN licence_type.licence_no IS
+  2      'Licence number of the driver';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE licence_type ADD CONSTRAINT licence_type_pk PRIMARY KEY ( licence_type_held,
+  2                                                                        licence_no );
+
+Table LICENCE_TYPE altered.
+
+SQL> 
+SQL> CREATE TABLE manufacturer (
+  2      man_code      CHAR(5) NOT NULL,
+  3      man_name      CHAR(10) NOT NULL,
+  4      man_country   CHAR(15) NOT NULL,
+  5      iso_code      CHAR(5) NOT NULL
+  6  );
+
+Table MANUFACTURER created.
+
+SQL> 
+SQL> COMMENT ON COLUMN manufacturer.man_code IS
+  2      'Manufacturer code';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN manufacturer.man_name IS
+  2      'Manufacturer name';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN manufacturer.man_country IS
+  2      'Country in which the manufacturer is based';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN manufacturer.iso_code IS
+  2      'ISO 3166 Alpha-3 code';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE manufacturer ADD CONSTRAINT manufacturer_pk PRIMARY KEY ( man_code );
+
+Table MANUFACTURER altered.
+
+SQL> 
+SQL> CREATE TABLE model (
+  2      model_id             CHAR(5) NOT NULL,
+  3      model_name           VARCHAR2(20) NOT NULL,
+  4      engine_size          CHAR(5) NOT NULL,
+  5      transmission         VARCHAR2(10) NOT NULL,
+  6      ground_clearancel    CHAR(5) NOT NULL,
+  7      ground_clearanceul   CHAR(5) NOT NULL,
+  8      man_code             CHAR(5) NOT NULL
+  9  );
+
+Table MODEL created.
+
+SQL> 
+SQL> ALTER TABLE model
+  2      ADD CONSTRAINT chk_transmission CHECK ( transmission IN (
+  3          'Automatic',
+  4          'Manual'
+  5      ) );
+
+Table MODEL altered.
+
+SQL> 
+SQL> COMMENT ON COLUMN model.model_id IS
+  2      'Model ID(Surrogate key)';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN model.model_name IS
+  2      'Model name';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN model.engine_size IS
+  2      'Size of the engine';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN model.transmission IS
+  2      'Transmission - Manual or Automatic';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN model.ground_clearancel IS
+  2      'Ground Clearance : Laden';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN model.ground_clearanceul IS
+  2      'Ground clearance : Unladen';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN model.man_code IS
+  2      'Manufacturer code';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE model ADD CONSTRAINT model_pk PRIMARY KEY ( model_id );
+
+Table MODEL altered.
+
+SQL> 
+SQL> ALTER TABLE model ADD CONSTRAINT key_2 UNIQUE ( model_name );
+
+Table MODEL altered.
+
+SQL> 
+SQL> ALTER TABLE model ADD CONSTRAINT model_name UNIQUE ( model_name );
+
+Error starting at line : 260 in command -
+ALTER TABLE model ADD CONSTRAINT model_name UNIQUE ( model_name )
+Error report -
+ORA-02261: such unique or primary key already exists in the table
+02261. 00000 -  "such unique or primary key already exists in the table"
+*Cause:    Self-evident.
+*Action:   Remove the extra key.
+SQL> 
+SQL> CREATE TABLE offence (
+  2      offence_no         VARCHAR2(5) NOT NULL,
+  3      offence_date       DATE NOT NULL,
+  4      offence_location   VARCHAR2(25) NOT NULL,
+  5      offence_time       DATE NOT NULL,
+  6      demerit_code       VARCHAR2(5) NOT NULL,
+  7      licence_no         VARCHAR2(15) NOT NULL,
+  8      vehicle_vin        CHAR(17) NOT NULL,
+  9      officer_id         VARCHAR2(8) NOT NULL
+ 10  );
+
+Table OFFENCE created.
+
+SQL> 
+SQL> COMMENT ON COLUMN offence.offence_no IS
+  2      'Offence number';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN offence.offence_time IS
+  2      'Time at which offence is committed';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN offence.demerit_code IS
+  2      'Demerit code';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN offence.licence_no IS
+  2      'Licence number of the driver';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN offence.vehicle_vin IS
+  2      'Vehicle Identification Number';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN offence.officer_id IS
+  2      'Officer ID';
+
+Comment created.
+
+SQL> 
+SQL> CREATE UNIQUE INDEX offence__idx ON
+  2      offence (
+  3          demerit_code
+  4      ASC );
+
+INDEX OFFENCE__IDX created.
+
+SQL> 
+SQL> ALTER TABLE offence ADD CONSTRAINT offence_pk PRIMARY KEY ( offence_no );
+
+Table OFFENCE altered.
+
+SQL> 
+SQL> CREATE TABLE officer (
+  2      officer_id      VARCHAR2(8) NOT NULL,
+  3      officer_fname   VARCHAR2(15) NOT NULL,
+  4      officer_lname   VARCHAR2(15) NOT NULL,
+  5      officer_rank    VARCHAR2(15) NOT NULL,
+  6      st_no           VARCHAR2(5)
+  7  );
+
+Table OFFICER created.
+
+SQL> 
+SQL> COMMENT ON COLUMN officer.officer_id IS
+  2      'Officer ID';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN officer.officer_fname IS
+  2      'Officer''s first name';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN officer.officer_lname IS
+  2      'Officer''s last name';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN officer.officer_rank IS
+  2      'Officer''s rank';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN officer.st_no IS
+  2      'Station number';
+
+Comment created.
+
+SQL> 
+SQL> CREATE UNIQUE INDEX officer__idx ON
+  2      officer (
+  3          st_no
+  4      ASC );
+
+INDEX OFFICER__IDX created.
+
+SQL> 
+SQL> ALTER TABLE officer ADD CONSTRAINT officer_pk PRIMARY KEY ( officer_id );
+
+Table OFFICER altered.
+
+SQL> 
+SQL> CREATE TABLE registration (
+  2      reg_no        VARCHAR2(10) NOT NULL,
+  3      dereg_date    DATE,
+  4      vehicle_vin   CHAR(17) NOT NULL
+  5  );
+
+Table REGISTRATION created.
+
+SQL> 
+SQL> COMMENT ON COLUMN registration.reg_no IS
+  2      'Registration number';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN registration.vehicle_vin IS
+  2      'Vehicle Identification Number';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE registration ADD CONSTRAINT registration_pk PRIMARY KEY ( reg_no );
+
+Table REGISTRATION altered.
+
+SQL> 
+SQL> CREATE TABLE registration_start (
+  2      reg_no     VARCHAR2(10) NOT NULL,
+  3      reg_date   DATE NOT NULL
+  4  );
+
+Table REGISTRATION_START created.
+
+SQL> 
+SQL> COMMENT ON COLUMN registration_start.reg_no IS
+  2      'Registration number';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN registration_start.reg_date IS
+  2      'Registration date';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE registration_start ADD CONSTRAINT registration_pkv1 PRIMARY KEY ( reg_no );
+
+Table REGISTRATION_START altered.
+
+SQL> 
+SQL> CREATE TABLE station (
+  2      st_no        VARCHAR2(5) NOT NULL,
+  3      st_address   VARCHAR2(25) NOT NULL,
+  4      st_phone     CHAR(12) NOT NULL,
+  5      st_timings   CHAR(1) NOT NULL
+  6  );
+
+Table STATION created.
+
+SQL> 
+SQL> ALTER TABLE station
+  2      ADD CONSTRAINT chk_st_timings CHECK ( st_timings IN (
+  3          'N',
+  4          'Y'
+  5      ) );
+
+Table STATION altered.
+
+SQL> 
+SQL> COMMENT ON COLUMN station.st_no IS
+  2      'Station number';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN station.st_address IS
+  2      'Station''s address';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN station.st_phone IS
+  2      'Station''s phone number';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN station.st_timings IS
+  2      'Station timings(open 24hrs or not)';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE station ADD CONSTRAINT station_pk PRIMARY KEY ( st_no );
+
+Table STATION altered.
+
+SQL> 
+SQL> CREATE TABLE suspension (
+  2      licence_no         VARCHAR2(15) NOT NULL,
+  3      suspension_start   DATE NOT NULL
+  4  );
+
+Table SUSPENSION created.
+
+SQL> 
+SQL> COMMENT ON COLUMN suspension.licence_no IS
+  2      'Licence number of the driver';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN suspension.suspension_start IS
+  2      'Date on which suspension started';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE suspension ADD CONSTRAINT suspension_pk PRIMARY KEY ( licence_no,
+  2                                                                    suspension_start );
+
+Table SUSPENSION altered.
+
+SQL> 
+SQL> CREATE TABLE suspension_period (
+  2      suspension_start   DATE NOT NULL,
+  3      suspension_end     DATE NOT NULL
+  4  );
+
+Table SUSPENSION_PERIOD created.
+
+SQL> 
+SQL> COMMENT ON COLUMN suspension_period.suspension_start IS
+  2      'Date on which suspension started';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN suspension_period.suspension_end IS
+  2      'Date on which the suspension ended';
+
+Comment created.
+
+SQL> 
+SQL> ALTER TABLE suspension_period ADD CONSTRAINT suspension_pkv1 PRIMARY KEY ( suspension_start );
+
+Table SUSPENSION_PERIOD altered.
+
+SQL> 
+SQL> CREATE TABLE vehicle (
+  2      vehicle_vin      CHAR(17) NOT NULL,
+  3      vehicle_type     VARCHAR2(25) NOT NULL,
+  4      man_yr           CHAR(4) NOT NULL,
+  5      vehicle_colour   CHAR(10),
+  6      model_id         CHAR(5) NOT NULL
+  7  );
+
+Table VEHICLE created.
+
+SQL> 
+SQL> ALTER TABLE vehicle
+  2      ADD CONSTRAINT chk_vehicle_type CHECK ( vehicle_type IN (
+  3          'Car',
+  4          'Heavy combination Truck',
+  5          'Heavy rigid Truck',
+  6          'Light rigid Truck',
+  7          'Marine',
+  8          'Medium rigid Truck',
+  9          'Motorcycle',
+ 10          'Multi combination Truck',
+ 11          'Tractor'
+ 12      ) );
+
+Table VEHICLE altered.
+
+SQL> 
+SQL> COMMENT ON COLUMN vehicle.vehicle_vin IS
+  2      'Vehicle Identification Number';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN vehicle.vehicle_type IS
+  2      'Type of Vehicle';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN vehicle.man_yr IS
+  2      'Year of Manufacture';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN vehicle.vehicle_colour IS
+  2      'Main colour of the vehicle';
+
+Comment created.
+
+SQL> 
+SQL> COMMENT ON COLUMN vehicle.model_id IS
+  2      'Model ID(Surrogate key)';
+
+Comment created.
+
+SQL> 
+SQL> CREATE UNIQUE INDEX vehicle__idx ON
+  2      vehicle (
+  3          model_id
+  4      ASC );
+
+INDEX VEHICLE__IDX created.
+
+SQL> 
+SQL> ALTER TABLE vehicle ADD CONSTRAINT vehicle_pk PRIMARY KEY ( vehicle_vin );
+
+Table VEHICLE altered.
+
+SQL> 
+SQL> ALTER TABLE offence
+  2      ADD CONSTRAINT demerit_offence FOREIGN KEY ( demerit_code )
+  3          REFERENCES demerit ( demerit_code );
+
+Table OFFENCE altered.
+
+SQL> 
+SQL> ALTER TABLE cancellation
+  2      ADD CONSTRAINT driver_cancellation FOREIGN KEY ( licence_no )
+  3          REFERENCES driver ( licence_no );
+
+Table CANCELLATION altered.
+
+SQL> 
+SQL> ALTER TABLE licence_type
+  2      ADD CONSTRAINT driver_licence_type FOREIGN KEY ( licence_no )
+  3          REFERENCES driver ( licence_no );
+
+Table LICENCE_TYPE altered.
+
+SQL> 
+SQL> ALTER TABLE offence
+  2      ADD CONSTRAINT driver_offence FOREIGN KEY ( licence_no )
+  3          REFERENCES driver ( licence_no );
+
+Table OFFENCE altered.
+
+SQL> 
+SQL> ALTER TABLE suspension
+  2      ADD CONSTRAINT driver_suspension FOREIGN KEY ( licence_no )
+  3          REFERENCES driver ( licence_no );
+
+Table SUSPENSION altered.
+
+SQL> 
+SQL> ALTER TABLE engine
+  2      ADD CONSTRAINT model_engine FOREIGN KEY ( model_id )
+  3          REFERENCES model ( model_id );
+
+Table ENGINE altered.
+
+SQL> 
+SQL> ALTER TABLE model
+  2      ADD CONSTRAINT model_manufacturer FOREIGN KEY ( man_code )
+  3          REFERENCES manufacturer ( man_code );
+
+Table MODEL altered.
+
+SQL> 
+SQL> ALTER TABLE vehicle
+  2      ADD CONSTRAINT model_vehicle FOREIGN KEY ( model_id )
+  3          REFERENCES model ( model_id );
+
+Table VEHICLE altered.
+
+SQL> 
+SQL> ALTER TABLE allocation
+  2      ADD CONSTRAINT offficer_allocation FOREIGN KEY ( officer_id )
+  3          REFERENCES officer ( officer_id );
+
+Table ALLOCATION altered.
+
+SQL> 
+SQL> ALTER TABLE offence
+  2      ADD CONSTRAINT officer_offence FOREIGN KEY ( officer_id )
+  3          REFERENCES officer ( officer_id );
+
+Table OFFENCE altered.
+
+SQL> 
+SQL> ALTER TABLE officer
+  2      ADD CONSTRAINT officer_station FOREIGN KEY ( st_no )
+  3          REFERENCES station ( st_no );
+
+Table OFFICER altered.
+
+SQL> 
+SQL> ALTER TABLE registration
+  2      ADD CONSTRAINT regstart_registration FOREIGN KEY ( reg_no )
+  3          REFERENCES registration_start ( reg_no );
+
+Table REGISTRATION altered.
+
+SQL> 
+SQL> ALTER TABLE allocation
+  2      ADD CONSTRAINT station_allocation FOREIGN KEY ( st_no )
+  3          REFERENCES station ( st_no );
+
+Table ALLOCATION altered.
+
+SQL> 
+SQL> ALTER TABLE suspension
+  2      ADD CONSTRAINT suspension_suspension_period FOREIGN KEY ( suspension_start )
+  3          REFERENCES suspension_period ( suspension_start );
+
+Table SUSPENSION altered.
+
+SQL> 
+SQL> ALTER TABLE offence
+  2      ADD CONSTRAINT vehicle_offence FOREIGN KEY ( vehicle_vin )
+  3          REFERENCES vehicle ( vehicle_vin );
+
+Table OFFENCE altered.
+
+SQL> 
+SQL> ALTER TABLE registration
+  2      ADD CONSTRAINT vehicle_registration FOREIGN KEY ( vehicle_vin )
+  3          REFERENCES vehicle ( vehicle_vin );
+
+Table REGISTRATION altered.
+
+SQL> SET echo OFF;
