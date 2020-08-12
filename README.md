@@ -60,3 +60,5 @@ use of showing some of the data they wish to record:
 ● a driver cancellation report.
 
 The tds_conceptual and the assumptions file is with reference to point 1.
+
+The tds_logical is made using the tds_schema and the schema's output can be seen in the tds_schema_output file. The tds_normalisation shows how the three forms have been normalised in order to proceed with the logical model.
